@@ -78,7 +78,7 @@
 
     <section id="subscribe" class="subscribe-card">
         <h2> 문제 해결</h2>
-      <form action="">
+      <form id="subscribe-form">
         <label for="problem-text">어떤 문제가 발생했나요?</label>
 
         <input
@@ -87,8 +87,9 @@
           name="problem"
           placeholder="예: 인터넷이 연결되지 않습니다.">
 
-        <button type="submit">해결 방법 확인</button>
+        <button id="subscribeButton" type="submit">해결 방법 확인</button>
       </form>
+        <p id="subscribeMessage" aria-live="polite">문제점을 적으시오.</p>
 
     </section>
 
@@ -98,10 +99,7 @@
     <small> 2026 PC Help Guide</small>
   </footer>
 
-
-
-
-
+  <script src="script.js"></script>
 
 
 </body>
