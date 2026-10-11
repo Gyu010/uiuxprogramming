@@ -165,6 +165,25 @@ button:active{
   transform: translateY(1px);
 }
 
+  #subscribeMessage {
+    margin-top: 16px;
+    color: #635955;
+  }
+
+  #subscribeMessage.is-success {
+    color: #245c3a;
+    background-color: #e7f7ed;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 700;
+  }
+
+  #subscribeButton:disabled {
+    color: #ffffff;
+    background-color: #a8a8b2;
+    cursor: not-allowed;
+  }
+
 /* 웹페이지가 표시되는 가로 폭이 768px 이하일 때만 적용  */
 @media (max-width: 768px){
   body{
@@ -230,25 +249,6 @@ button:active{
   button{
     /* 모바일에서도 버튼의 누르는 영역이 너무 낮아지지 않게 설정 */
     min-height: 48px;
-  }
-
-  #subscribeMessage {
-    margin-top: 16px;
-    color: #635955;
-  }
-
-  #subscribeMessage.is-success {
-    color: #245c3a;
-    background-color: #e7f7ed;
-    padding: 12px;
-    border-radius: 10px;
-    font-weight: 700;
-  }
-
-  #subscribeButton:disabled {
-    color: #ffffff;
-    background-color: #a8a8b2;
-    cursor: not-allowed;
   }
 
 }

@@ -1,46 +1,50 @@
-const serviceName = "PC:Help"
+
+const serviceName = "PC Help Guide"
 let isSubcribed = false;
 let submitCount = 0;
 
 
-function makeSubcriibeMessage(email, subscribed) {
+function makeSubcriibeMessage(problem, subscribed) {
   if(subscribed == true)  {
-    return email + "로 신청이 완료되었습니다.";
+    return problem + "문제를 확인했습니다.";
   }
   
-  return "이메일을 입력한 뒤 신청해주세요";
+  return "문제점을 입력한 뒤 확인해주세요.";
 }
 
 const subscribeform = document.querySelector("#subscribe-form");
-const emailInput = document.querySelector("#email");
+const problemInput = document.querySelector("#problem-text");
 const subscribeButton = document.querySelector("#subscribeButton");
 const subscribeMessage = document.querySelector("#subscribeMessage");
 
 
 console.log(subscribeform);                               
-console.log(emailInput);                               
+console.log(problemInput);                               
 console.log(subscribeButton);                               
 console.log(subscribeMessage);                               
 
 function handleSubscribe(event) {
   event.preventDefault();
 
-  const subscriberEmail = emailInput.value.trim();
+  const problemText = problemInput.value.trim();
 
-  if (subscriberEmail === "") {
+  if (problemText === "") {
     subscribeMessage.textContent = 
-    "이메일을 입력한 뒤 신청해주세요.";
-    emailInput.focus();
+    "문제점을 입력한 뒤 확인해주세요.";
+
+    problemInput.focus();
     return;
   }
 
   isSubcribed = true;
   submitCount +=  1;
-  subscribeMessage.textContent = makeSubcriibeMessage(subscriberEmail, isSubcribed);
+
+  subscribeMessage.textContent =
+    makeSubcriibeMessage(problemText, isSubcribed);
 
   subscribeMessage.classList.add("is-success");
 
-  subscribeButton.textContent = "신청완료";
+  subscribeButton.textContent = "확인완료";
   subscribeButton.disabled = true;
 
 }
