@@ -48,22 +48,104 @@
     <section id="features">
       <h2>주요 기능</h2>
 
-      <ul class="features-list">
-        <li class="features-list-card">
-          <h3>문제 유형 확인</h3>
-          <p>인터넷, 프로그램, 장치 등 문제 유형을 확인할 수 있습니다.</p>
-        </li>
+  <div class="tabs" role="tablist" aria-label="기능선택">
+    <button 
+      id="tab-practice"
+      class="tab tab-is-active"
+      type="button"
+      role="tab"
+      aria-selected="true"
+      aria-controls="features-practice"
+      data-target="features-practice">
+      문제 유형 확인
+    </button>
 
-        <li class="features-list-card">
-          <h3>단계별 해결 방법</h3>
-          <p>문제를 해결하는 과정을 순서대로 쉽게 확인할 수 있습니다.</p>
-        </li>
+    <button 
+      id="tab-audience"
+      class="tab"
+      type="button"
+      role="tab"
+      aria-selected="false"
+      aria-controls="features-audience"
+      data-target="features-audience">
+      단계별 해결 방법
+    </button>
 
-        <li class="features-list-card">
-          <h3>문제 해결 기록</h3>
-          <p>어떤 문제가 발생했고 어떻게 해결했는지 확인할 수 있습니다.</p>
-        </li>
-      </ul>
+    <button 
+      id="tab-feedback"
+      class="tab"
+      type="button"
+      role="tab"
+      aria-selected="false"
+      aria-controls="features-feedback"
+      data-target="features-feedback">
+      문제 해결 기록
+    </button>
+  </div> 
+
+
+  <div
+    id="features-practice"
+    class="panel"
+    role="tabpanel"
+    aria-labelledby="tab-practice">
+    <h3>문제 유형 확인</h3>
+    <p>문제 유형 확인입니다.</p>
+  </div>
+
+  <div
+    id="features-audience"
+    class="panel"
+    role="tabpanel"
+    aria-labelledby="tab-audience"
+    hidden>
+    <h3>단계별 해결 방법</h3>
+    <p>단계별로 해결 방법입니다.</p>
+  </div>
+
+  <div
+    id="features-feedback"
+    class="panel"
+    role="tabpanel"
+    aria-labelledby="tab-feedback"
+    hidden>
+    <h3>문제 해결 기록</h3>
+    <p>해결 기록입니다.</p>
+  </div>
+
+    </section>
+
+    <section id="event-practice">
+      <h2>문제 해결 설정</h2>
+
+      <div class="event-grid">
+        <article class="event-card">
+          <h3>화면 테마</h3>
+          <button id="themeButton" type="button">다크 테마로 바꾸기</button>
+        </article>
+
+        <article class="event-card">
+          <h3>사용자 정보</h3>
+          <label for="nickname">사용자 이름</label>
+          <input type="text" id="nickname" maxlength="10">
+          <p id="nicknameCount" aria-live="polite">0 / 10</p>
+        </article>
+
+        <article class="event-card">
+          <h3>문제 해결 시작</h3>
+          <label class="agree-row">
+            <input type="checkbox" id="agreeCheck">
+            입력한 문제 정보를 확인했습니다.
+          </label>
+          <p id="agreeMessage" aria-live="polite">
+            확인 후 문제 해결을 시작할 수 있습니다.
+          </p>
+          <button id="startButton" type="button" disabled>
+            문제 해결 시작
+          </button>
+        </article>
+      </div>
+
     </section>
 
     <section id="steps">
