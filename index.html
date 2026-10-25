@@ -131,49 +131,177 @@
           <p id="nicknameCount" aria-live="polite">0 / 10</p>
         </article>
 
-        <article class="event-card">
-          <h3>문제 해결 시작</h3>
-          <label class="agree-row">
-            <input type="checkbox" id="agreeCheck">
-            입력한 문제 정보를 확인했습니다.
-          </label>
-          <p id="agreeMessage" aria-live="polite">
-            확인 후 문제 해결을 시작할 수 있습니다.
-          </p>
-          <button id="startButton" type="button" disabled>
-            문제 해결 시작
-          </button>
-        </article>
       </div>
 
     </section>
-
+    
     <section id="steps">
         <h2> 이용 방법 </h2>
 
         <ol>
-        <li>발생한 문제의 유형을 확인합니다.</li>
-        <li>현재 발생한 증상을 입력합니다.</li>
-        <li>안내된 해결 방법을 확인합니다.</li>
+        <li>안내 내용을 확인하고 문제 해결을 시작합니다.</li>
+        <li>문제 유형을 선택하고 현재 증상을 입력합니다.</li>
+        <li>입력한 정보와 기본 해결 방법을 확인합니다.</li>
+        <li>안내 확인을 완료하거나 이전 단계로 돌아가 수정합니다.</li>
         </ol>
     </section>
 
-    <section id="subscribe" class="subscribe-card">
-        <h2> 문제 해결</h2>
-      <form id="subscribe-form">
-        <label for="problem-text">어떤 문제가 발생했나요?</label>
+
+  
+  <section id="subscribe" class="subscribe-card">
+  <h2>문제 해결</h2>
+  <p>총 4단계로 문제 해결 방법을 확인합니다.</p>
+
+  
+  <ol class="flow-progress" aria-label="문제 해결 진행 단계">
+    <li data-progress-step="start" class="is-current"
+        aria-current="step">1. 시작</li>
+    <li data-progress-step="input">2. 입력</li>
+    <li data-progress-step="review">3. 확인</li>
+    <li data-progress-step="complete">4. 완료</li>
+  </ol>
+
+  
+  <div id="flow-start" class="flow-stage">
+    <h3 tabindex="-1">1단계 · 시작</h3>
+
+    <p>
+      문제 유형에 따라 기본적인 점검 방법을 안내합니다.
+      실제 수리나 자동 진단을 수행하지는 않습니다.
+    </p>
+
+    <label class="agree-row" for="agreeCheck">
+      <input type="checkbox" id="agreeCheck">
+      <span>서비스 안내를 확인했고 문제 해결 과정을 시작하겠습니다.</span>
+    </label>
+
+    <p id="agreeMessage" aria-live="polite">
+      체크박스를 선택하면 시작 버튼이 활성화됩니다.
+    </p>
+
+    <button id="startButton" type="button" disabled>
+      문제 해결 시작
+    </button>
+  </div>
+
+  
+  <div id="flow-input" class="flow-stage" hidden>
+    <h3 tabindex="-1">2단계 · 문제 입력</h3>
+
+    <form id="subscribe-form" class="flow-form" novalidate>
+
+      <div class="form-field">
+        <label for="problem-type">문제 유형 (필수)</label>
+
+        <select id="problem-type" name="problemType"
+        aria-describedby="typeError">
+          <option value="">문제 유형을 선택하세요</option>
+          <option value="internet">인터넷 연결 문제</option>
+          <option value="program">프로그램 오류</option>
+          <option value="performance">컴퓨터 속도 저하</option>
+          <option value="hardware">주변기기 문제</option>
+        </select>
+
+        <p id="typeError" class="field-error" role="alert" hidden>
+          문제 유형을 선택해주세요.
+        </p>
+      </div>
+
+      <div class="form-field">
+        <label for="problem-text">
+          어떤 문제가 발생했나요? (필수)
+        </label>
 
         <input
           type="text"
           id="problem-text"
           name="problem"
-          placeholder="예: 인터넷이 연결되지 않습니다.">
+          maxlength="180"
+          placeholder="예: 인터넷이 연결되지 않습니다."
+          aria-describedby="problemError">
 
-        <button id="subscribeButton" type="submit">해결 방법 확인</button>
-      </form>
-        <p id="subscribeMessage" aria-live="polite">문제점을 입력해주세요.</p>
+        <p id="problemError" class="field-error" role="alert" hidden>
+          현재 발생한 증상을 입력해주세요.
+        </p>
+      </div>
 
-    </section>
+      <p id="subscribeMessage" aria-live="polite">
+        문제 유형과 증상을 입력한 뒤 확인해주세요.
+      </p>
+
+      <div class="flow-actions">
+        <button id="inputBackButton" type="button"
+                class="button-secondary">
+          이전
+        </button>
+
+        <button id="subscribeButton" type="submit">
+          입력 내용 확인
+        </button>
+      </div>
+    </form>
+  </div>
+
+  
+  <div id="flow-review" class="flow-stage" hidden>
+    <h3 tabindex="-1">3단계 · 입력 내용 확인</h3>
+
+    <dl class="review-list">
+      <div>
+        <dt>사용자 이름</dt>
+        <dd id="reviewNickname"></dd>
+      </div>
+
+      <div>
+        <dt>문제 유형</dt>
+        <dd id="reviewType"></dd>
+      </div>
+
+      <div>
+        <dt>입력한 증상</dt>
+        <dd id="reviewProblem"></dd>
+      </div>
+    </dl>
+
+    <h4>기본 해결 안내</h4>
+    <ol id="solutionList" class="solution-list"></ol>
+
+    <p>
+      정보를 수정하려면 '이전'을 누르세요.
+      내용을 확인했다면 완료 버튼을 누르세요.
+    </p>
+
+    <div class="flow-actions">
+      <button id="reviewBackButton" type="button"
+              class="button-secondary">
+        이전 (수정하기)
+      </button>
+
+      <button id="completeButton" type="button">
+        안내 확인 완료
+      </button>
+    </div>
+  </div>
+
+  
+  <div id="flow-complete" class="flow-stage" hidden>
+    <h3 tabindex="-1">4단계 · 완료</h3>
+
+    <p id="completeMessage"
+      class="completion-message"
+      role="status"></p>
+
+    <p>
+      문제 유형에 맞는 기본 안내를 확인했습니다.
+      실제 문제가 해결됐는지 직접 확인해주세요.
+    </p>
+
+    <button id="restartButton" type="button">
+      다시 시작
+    </button>
+  </div>
+
+</section>
 
   </main>
 

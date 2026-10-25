@@ -156,7 +156,8 @@ button:hover{
 }
 
 button:focus,
-input:focus{
+input:focus,
+select:focus {
   outline: 3px solid #a9c9e5;
   outline-offset: 2px;
 }
@@ -370,3 +371,210 @@ button:active{
   }
 
 }
+
+  .flow-progress {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .flow-progress li {
+    min-width: 0;
+    padding: 10px 6px;
+    border: 1px solid #d6e0e8;
+    border-radius: 10px;
+    background-color: #ffffff;
+    text-align: center;
+    font-size: 15px;
+  }
+
+
+  .flow-progress li.is-current {
+    color: #ffffff;
+    background-color: #2f6fa3;
+    border-color: #2f6fa3;
+    font-weight: 700;
+  }
+
+  .flow-progress li.is-done {
+    color: #245c3a;
+    background-color: #e7f7ed;
+  }
+
+  .flow-stage {
+    padding-top: 8px;
+  }
+
+  .flow-stage[hidden],
+  .field-error[hidden] {
+    display: none;
+  }
+
+  .flow-form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .form-field label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+
+  .form-field input,
+  .form-field select {
+    display: block;
+    width: 100%;
+  }
+
+  select {
+    min-width: 0;
+    padding: 12px;
+    border: 1px solid #aebdcc;
+    border-radius: 10px;
+    background-color: #ffffff;
+    font: inherit;
+  }
+
+  .form-field [aria-invalid="true"] {
+    border: 2px solid #ba2929;
+  }
+
+  .field-error {
+    margin-top: 6px;
+    color: #a51f1f;
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .flow-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .flow-actions button {
+    flex: 1 1 180px;
+  }
+
+  .button-secondary {
+    color: #2f6fa3;
+    background-color: #ffffff;
+    border: 1px solid #2f6fa3;
+  }
+
+  .button-secondary:hover {
+    color: #24577f;
+    background-color: #deebf7;
+  }
+
+  #startButton:disabled {
+    background-color: #a8a8b2;
+    cursor: not-allowed;
+  }
+
+  .agree-row input[type="checkbox"] {
+    width: auto;
+    flex: 0 0 auto;
+  }
+
+  .review-list div {
+    padding: 10px 0;
+    border-bottom: 1px solid #d6e0e8;
+  }
+
+  .review-list dt {
+    font-weight: 700;
+  }
+
+  .review-list dd {
+    margin: 4px 0 0;
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+  }
+
+  .solution-list {
+    padding-left: 24px;
+  }
+
+  .solution-list li {
+    margin-bottom: 8px;
+  }
+
+  .completion-message {
+    padding: 16px;
+    border-radius: 10px;
+    color: #245c3a;
+    background-color: #e7f7ed;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+  }
+
+  body.dark .flow-progress li {
+    color: #ffffff;
+    background-color: #414351;
+  }
+
+  body.dark .flow-progress li.is-current {
+    background-color: #2f6fa3;
+  }
+
+  body.dark .flow-progress li.is-done {
+    background-color: #245c3a;
+  }
+
+  body.dark select {
+    color: #ffffff;
+    background-color: #2d2e38;
+    border-color: #a9afbd;
+  }
+
+  body.dark .button-secondary {
+    color: #ffffff;
+    background-color: #414351;
+  }
+
+  body.dark .field-error {
+    color: #ffbdbd;
+  }
+
+  body.dark .completion-message {
+    color: #ffffff;
+    background-color: #245c3a;
+  }
+
+  body.dark #agreeMessage {
+    color: #eeeeee;
+    background-color: #333541;
+  }
+
+  body.dark #agreeMessage.is-ready {
+    color: #ffffff;
+    background-color: #245c3a;
+  }
+
+  body.dark .review-list div {
+    border-color: #777a91;
+  }
+
+  @media (max-width: 768px) {
+
+    .flow-actions {
+      flex-direction: column;
+    }
+
+    .flow-actions button {
+      flex: 0 1 auto;
+      width: 100%;
+    }
+
+    .flow-progress li {
+      padding: 10px 2px;
+      font-size: 13px;
+    }
+
+  }
