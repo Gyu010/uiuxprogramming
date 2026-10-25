@@ -578,3 +578,78 @@ button:active{
     }
 
   }
+
+.record-box {
+  margin: 24px 0;
+  padding: 20px;
+  border: 1px solid #d6e0e8;
+  border-radius: 12px;
+  background-color: #ffffff;
+}
+
+.record-box label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.record-box select {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.record-box button {
+  margin: 0 8px 8px 0;
+}
+
+.record-box select[aria-invalid="true"] {
+  border: 2px solid #ba2929;
+}
+
+.history-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.history-list li {
+  padding: 12px;
+  border: 1px solid #d6e0e8;
+  border-radius: 10px;
+  background-color: #ffffff;
+  overflow-wrap: anywhere;
+}
+
+.history-list li p {
+  margin: 4px 0 0;
+  overflow-wrap: anywhere;
+}
+
+body.dark .record-box,
+body.dark .history-list li {
+  color: #ffffff;
+  background-color: #414351;
+  border-color: #777a91;
+}
+
+@media (max-width: 768px) {
+  .record-box button {
+    width: 100%;
+    margin: 0 0 8px 0;
+  }
+}
+
+#saveResultButton:disabled {
+  background-color: #a8a8b2;
+  cursor: not-allowed;
+}
+
+.history-list button {
+  margin-top: 12px;
+  background-color: #b94a48;
+}
+
+.history-list button:hover {
+  background-color: #923735;
+}

@@ -32,7 +32,6 @@ function handleSubscribe(event) {
   const typeError = document.querySelector("#typeError");
   const problemError = document.querySelector("#problemError");
 
-  // 7주차 추가: 필수값 누락 검사
   const missingType = problemType.value === "";
   const missingProblem = problemText === "";
 
@@ -129,7 +128,6 @@ function handleAgreeChange() {
 
 agreeCheck.addEventListener("change", handleAgreeChange)
 
-//탭 기능
 const tabs = document.querySelectorAll(".tab");
 const panels = document.querySelectorAll(".panel");
 
@@ -202,23 +200,18 @@ startButton.addEventListener("click", function() {
 });
 
 
-// 7주차 추가: 이전 단계 이동
 const inputBackButton = document.querySelector("#inputBackButton");
 const reviewBackButton = document.querySelector("#reviewBackButton");
 
-// 입력 단계에서 시작 단계로 이동
 inputBackButton.addEventListener("click", function() {
   showStep("start");
 });
 
-// 확인 단계에서 입력 단계로 이동
-// 기존 입력값은 유지
 reviewBackButton.addEventListener("click", function() {
   showStep("input");
 });
 
 
-// 7주차 추가: 완료 처리
 const completeButton = document.querySelector("#completeButton");
 
 completeButton.addEventListener("click", function() {
@@ -260,3 +253,147 @@ restartButton.addEventListener("click", function() {
 
   showStep("start");
 });
+
+
+
+const resultStatus = document.querySelector("#resultStatus");
+const saveResultButton = document.querySelector("#saveResultButton");
+const saveResultMessage = document.querySelector("#saveResultMessage");
+const viewHistoryButton = document.querySelector("#viewHistoryButton");
+
+const historyList = document.querySelector("#historyList");
+const historyEmpty = document.querySelector("#historyEmpty");
+
+const historyKey = "pcHelpGuideHistory";
+let savedHistory = [];
+
+try {
+  const stored = JSON.parse(localStorage.getItem(historyKey) || "[]");
+
+  if (Array.isArray(stored)) {
+    savedHistory = stored;
+  }
+} catch (error) {
+  savedHistory = [];
+}
+
+function showHistory() {
+  historyList.replaceChildren();
+
+  historyEmpty.hidden = savedHistory.length > 0;
+
+  savedHistory.forEach(function(record, index) {
+    const li = document.createElement("li");
+    const title = document.createElement("strong");
+    const detail = document.createElement("p");
+
+    title.textContent = record.type + " - " + record.status;
+
+    detail.textContent =
+        "사용자: " + (record.nickname || "미입력") +
+        " / 증상: " + record.problem +
+        " / 날짜: " + record.date;
+
+    const deleteButton = document.createElement("button");
+    deleteButton.textContent = "기록 삭제";
+    deleteButton.type = "button";
+
+    deleteButton.addEventListener("click", function() {
+      const confirmed = confirm("이 기록을 삭제하시겠습니까?");
+
+      if (!confirmed) {
+        return;
+      }
+
+      const updatedHistory = savedHistory.filter(function(item, i) {
+        return i !== index;
+      });
+
+      try {
+        localStorage.setItem(
+          historyKey,
+          JSON.stringify(updatedHistory)
+        );
+
+        savedHistory = updatedHistory;
+        showHistory();
+      } catch (error) {
+        alert("기록을 삭제하지 못했습니다.");
+      }
+    });
+
+    li.appendChild(title);
+    li.appendChild(detail);
+    li.appendChild(deleteButton);
+
+    historyList.appendChild(li);
+  });
+}
+
+resultStatus.addEventListener("change", function() {
+  resultStatus.removeAttribute("aria-invalid");
+  saveResultMessage.textContent = "";
+});
+
+saveResultButton.addEventListener("click", function() {
+
+  const status = resultStatus.value;
+
+  if (status === "") {
+    saveResultMessage.textContent =
+      "해결 결과를 선택한 후 저장해주세요.";
+
+    resultStatus.setAttribute("aria-invalid", "true");
+    resultStatus.focus();
+    return;
+  }
+
+  const record = {
+    nickname: nicknameInput.value.trim() || "미입력",
+    type: document.querySelector("#reviewType").textContent,
+    problem: document.querySelector("#reviewProblem").textContent,
+    status: status,
+    date: new Date().toLocaleString("ko-KR")
+  };
+
+  const newHistory = [record, ...savedHistory];
+
+  try {
+    localStorage.setItem(historyKey, JSON.stringify(newHistory));
+    savedHistory = newHistory;
+  } catch (error) {
+    saveResultMessage.textContent =
+      "기록을 저장할 수 없습니다. 브라우저 저장 설정을 확인해주세요.";
+    return;
+  }
+
+  showHistory();
+
+  if (status === "해결됨") {
+    saveResultMessage.textContent =
+      "해결 완료 기록을 저장했습니다.";
+  } else {
+    saveResultMessage.textContent =
+      "해결되지 않은 문제로 기록했습니다. 다른 해결 방법을 시도해 보세요.";
+  }
+
+  saveResultButton.disabled = true;
+});
+
+viewHistoryButton.addEventListener("click", function() {
+  document.querySelector("#tab-feedback").click();
+  document.querySelector("#features").scrollIntoView({
+    behavior: "smooth"
+  });
+});
+
+restartButton.addEventListener("click", function() {
+  resultStatus.value = "";
+  resultStatus.removeAttribute("aria-invalid");
+
+  saveResultMessage.textContent = "";
+  saveResultButton.disabled = false;
+});
+
+showHistory();
+

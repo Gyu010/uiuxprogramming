@@ -109,8 +109,15 @@
     role="tabpanel"
     aria-labelledby="tab-feedback"
     hidden>
+
     <h3>문제 해결 기록</h3>
-    <p>해결 기록입니다.</p>
+    
+    <p id="historyEmpty">
+    아직 저장된 기록이 없습니다.
+    문제 해결 완료 후 결과를 저장해주세요.
+  </p>
+
+  <ul id="historyList" class="history-list"></ul>
   </div>
 
     </section>
@@ -134,7 +141,7 @@
       </div>
 
     </section>
-    
+
     <section id="steps">
         <h2> 이용 방법 </h2>
 
@@ -295,6 +302,33 @@
       문제 유형에 맞는 기본 안내를 확인했습니다.
       실제 문제가 해결됐는지 직접 확인해주세요.
     </p>
+
+  <div class="record-box">
+  <h4>문제 해결 결과 기록</h4>
+
+  <label for="resultStatus">
+    문제가 해결되었나요? (필수)
+  </label>
+
+  <select id="resultStatus"
+          aria-describedby="saveResultMessage">
+    <option value="">해결 결과를 선택하세요</option>
+    <option value="해결됨">해결됨</option>
+    <option value="미해결">아직 해결되지 않음</option>
+  </select>
+
+  <button id="saveResultButton" type="button">
+    해결 결과 저장
+  </button>
+
+  <p id="saveResultMessage" aria-live="polite"></p>
+
+  <button id="viewHistoryButton"
+      type="button"
+      class="button-secondary">
+    저장 기록 보기
+  </button>
+  </div>
 
     <button id="restartButton" type="button">
       다시 시작
