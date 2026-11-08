@@ -265,6 +265,14 @@ const historyList = document.querySelector("#historyList");
 const historyEmpty = document.querySelector("#historyEmpty");
 
 const historyKey = "pcHelpGuideHistory";
+
+const resultForm = document.querySelector("#resultForm");
+const remainingWrap = document.querySelector("#remainingWrap");
+const remainingProblem = document.querySelector("#remainingProblem");
+const remainingCount = document.querySelector("#remainingCount");
+const remainingProblemError = document.querySelector("#remainingProblemError");
+
+let isSubmitting = false;
 let savedHistory = [];
 
 try {
@@ -293,6 +301,11 @@ function showHistory() {
         "사용자: " + (record.nickname || "미입력") +
         " / 증상: " + record.problem +
         " / 날짜: " + record.date;
+    
+    if (record.remainingProblem) {
+      detail.textContent +=
+        " / 남은 증상: " + record.remainingProblem;
+    }
 
     const deleteButton = document.createElement("button");
     deleteButton.textContent = "기록 삭제";
@@ -331,53 +344,57 @@ function showHistory() {
 }
 
 resultStatus.addEventListener("change", function() {
+
   resultStatus.removeAttribute("aria-invalid");
   saveResultMessage.textContent = "";
+
+  const isUnresolved = resultStatus.value === "미해결";
+
+  remainingWrap.hidden = !isUnresolved;
+  remainingProblem.disabled = !isUnresolved;
+
+  if (!isUnresolved) {
+    remainingProblem.value = "";
+    remainingCount.textContent = "0 / 200자 (최소 5자)";
+    remainingProblemError.hidden = true;
+    remainingProblem.removeAttribute("aria-invalid");
+  }
 });
 
-saveResultButton.addEventListener("click", function() {
+remainingProblem.addEventListener("input", function() {
 
-  const status = resultStatus.value;
+  const length = remainingProblem.value.trim().length;
 
-  if (status === "") {
-    saveResultMessage.textContent =
-      "해결 결과를 선택한 후 저장해주세요.";
+  remainingCount.textContent =
+    length + " / 200자 (최소 5자)";
 
-    resultStatus.setAttribute("aria-invalid", "true");
-    resultStatus.focus();
-    return;
+  if (length >= 5) {
+    remainingProblemError.hidden = true;
+    remainingProblem.removeAttribute("aria-invalid");
+    saveResultMessage.textContent = "";
   }
+});
 
-  const record = {
-    nickname: nicknameInput.value.trim() || "미입력",
-    type: document.querySelector("#reviewType").textContent,
-    problem: document.querySelector("#reviewProblem").textContent,
-    status: status,
-    date: new Date().toLocaleString("ko-KR")
-  };
+restartButton.addEventListener("click", function() {
 
-  const newHistory = [record, ...savedHistory];
+  resultForm.reset();
 
-  try {
-    localStorage.setItem(historyKey, JSON.stringify(newHistory));
-    savedHistory = newHistory;
-  } catch (error) {
-    saveResultMessage.textContent =
-      "기록을 저장할 수 없습니다. 브라우저 저장 설정을 확인해주세요.";
-    return;
-  }
+  resultStatus.disabled = false;
+  resultStatus.removeAttribute("aria-invalid");
 
-  showHistory();
+  remainingWrap.hidden = true;
+  remainingProblem.disabled = true;
+  remainingProblem.value = "";
+  remainingProblem.removeAttribute("aria-invalid");
+  remainingProblemError.hidden = true;
 
-  if (status === "해결됨") {
-    saveResultMessage.textContent =
-      "해결 완료 기록을 저장했습니다.";
-  } else {
-    saveResultMessage.textContent =
-      "해결되지 않은 문제로 기록했습니다. 다른 해결 방법을 시도해 보세요.";
-  }
+  remainingCount.textContent = "0 / 200자 (최소 5자)";
 
-  saveResultButton.disabled = true;
+  saveResultMessage.textContent = "";
+  saveResultButton.disabled = false;
+  saveResultButton.textContent = "해결 결과 저장";
+
+  isSubmitting = false;
 });
 
 viewHistoryButton.addEventListener("click", function() {
@@ -387,12 +404,71 @@ viewHistoryButton.addEventListener("click", function() {
   });
 });
 
-restartButton.addEventListener("click", function() {
-  resultStatus.value = "";
-  resultStatus.removeAttribute("aria-invalid");
 
-  saveResultMessage.textContent = "";
-  saveResultButton.disabled = false;
+resultForm.addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  if (isSubmitting || saveResultButton.disabled) {
+    return;
+  }
+
+  const status = resultStatus.value;
+  const remainingText = remainingProblem.value.trim();
+
+  if (status === "") {
+    saveResultMessage.textContent = "해결 여부를 선택해주세요.";
+    resultStatus.setAttribute("aria-invalid", "true");
+    resultStatus.focus();
+    return;
+  }
+
+  if (status === "미해결" && remainingText.length < 5) {
+    saveResultMessage.textContent = "남은 증상을 5자 이상 입력해주세요.";
+    remainingProblemError.hidden = false;
+    remainingProblem.setAttribute("aria-invalid", "true");
+    remainingProblem.focus();
+    return;
+  }
+
+  isSubmitting = true;
+  saveResultButton.disabled = true;
+  saveResultButton.textContent = "저장 중...";
+
+  const record = {
+    nickname: nicknameInput.value.trim() || "미입력",
+    type: document.querySelector("#reviewType").textContent,
+    problem: document.querySelector("#reviewProblem").textContent,
+    status: status,
+    remainingProblem: status === "미해결" ? remainingText : "",
+    date: new Date().toLocaleString("ko-KR")
+  };
+
+  const newHistory = [record, ...savedHistory];
+
+  try {
+    localStorage.setItem(historyKey, JSON.stringify(newHistory));
+
+    savedHistory = newHistory;
+    showHistory();
+
+    saveResultMessage.textContent =
+      status === "해결됨"
+        ? "해결 완료 기록을 저장했습니다."
+        : "미해결 증상과 결과를 저장했습니다.";
+
+    resultStatus.disabled = true;
+    remainingProblem.disabled = true;
+    saveResultButton.textContent = "저장 완료";
+
+  } catch (error) {
+    saveResultMessage.textContent =
+      "저장에 실패했습니다. 다시 시도해주세요.";
+
+    saveResultButton.disabled = false;
+    saveResultButton.textContent = "해결 결과 저장";
+  } finally {
+    isSubmitting = false;
+  }
 });
 
 showHistory();

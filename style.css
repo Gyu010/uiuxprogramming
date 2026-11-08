@@ -653,3 +653,46 @@ body.dark .history-list li {
 .history-list button:hover {
   background-color: #923735;
 }
+
+.record-box {
+  display: block;
+}
+
+#remainingWrap {
+  margin: 16px 0;
+}
+
+#remainingWrap[hidden] {
+  display: none;
+}
+
+#remainingProblem {
+  display: block;
+  width: 100%;
+  min-height: 90px;
+  padding: 12px;
+  border: 1px solid #aebdcc;
+  border-radius: 10px;
+  font: inherit;
+  resize: vertical;
+}
+
+#remainingProblem[aria-invalid="true"] {
+  border: 2px solid #ba2929;
+}
+
+#remainingProblem:focus {
+  outline: 3px solid #a9c9e5;
+  outline-offset: 2px;
+}
+
+body.dark #remainingProblem {
+  color: #ffffff;
+  background-color: #2d2e38;
+}
+
+@media (max-width: 768px) {
+  #remainingProblem {
+    width: 100%;
+  }
+}

@@ -274,8 +274,7 @@
     <ol id="solutionList" class="solution-list"></ol>
 
     <p>
-      정보를 수정하려면 '이전'을 누르세요.
-      내용을 확인했다면 완료 버튼을 누르세요.
+      정보를 수정하려면 이전 을 누르세요.
     </p>
 
     <div class="flow-actions">
@@ -303,7 +302,7 @@
       실제 문제가 해결됐는지 직접 확인해주세요.
     </p>
 
-  <div class="record-box">
+  <form id="resultForm" class="record-box" novalidate>
   <h4>문제 해결 결과 기록</h4>
 
   <label for="resultStatus">
@@ -311,24 +310,59 @@
   </label>
 
   <select id="resultStatus"
-          aria-describedby="saveResultMessage">
+        aria-describedby="resultHelp saveResultMessage">
     <option value="">해결 결과를 선택하세요</option>
     <option value="해결됨">해결됨</option>
     <option value="미해결">아직 해결되지 않음</option>
   </select>
 
-  <button id="saveResultButton" type="button">
-    해결 결과 저장
-  </button>
+    <p id="resultHelp">
+    문제 해결 안내를 따라 해본 후 결과를 선택해주세요.
+    </p>
 
-  <p id="saveResultMessage" aria-live="polite"></p>
+  <div id="remainingWrap" hidden>
 
-  <button id="viewHistoryButton"
-      type="button"
-      class="button-secondary">
-    저장 기록 보기
-  </button>
+    <label for="remainingProblem">
+      아직 해결되지 않은 증상 (필수)
+    </label>
+
+    <textarea
+      id="remainingProblem"
+      rows="3"
+      maxlength="200"
+      placeholder="예: 공유기를 재시작해도 인터넷이 연결되지 않습니다."
+      aria-describedby="remainingCount remainingProblemError"
+      disabled></textarea>
+
+    <p id="remainingCount" aria-live="polite">
+      0 / 200자 (최소 5자)
+    </p>
+
+    <p id="remainingProblemError"
+      class="field-error"
+      role="alert"
+      hidden>
+      남은 증상을 5자 이상 입력해주세요.
+    </p>
+
   </div>
+
+
+
+
+    <button id="saveResultButton" type="submit">
+      해결 결과 저장
+    </button>
+
+    <p id="saveResultMessage" aria-live="polite"></p>
+
+    <button id="viewHistoryButton"
+        type="button"
+        class="button-secondary">
+      저장 기록 보기
+    </button>
+
+  </form>
 
     <button id="restartButton" type="button">
       다시 시작
